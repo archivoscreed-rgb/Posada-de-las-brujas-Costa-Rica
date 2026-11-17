@@ -9,18 +9,19 @@
   <meta property="og:description" content="Comida casera costarricense, parrilla y cocteles en Escazú centro. Desde 2012.">
   <meta property="og:image" content="img/fachada.jpg">
   <meta name="theme-color" content="#2a1547">
-  <link rel="icon" href="img/favicon.png">
-  <link rel="apple-touch-icon" href="img/icono-180.png">
+  <!-- El ícono de la casita va SOLO en la pestaña del navegador -->
+  <link rel="icon" type="image/png" sizes="32x32" href="img/pestana-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/pestana-192.png">
+  <link rel="apple-touch-icon" href="img/pestana-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,600..900,100&display=swap" rel="stylesheet">
   <style>
     /* ───────── Paleta: 4 colores, sacados del logo ─────────
        beige  = fondo de la página
-       morado = color de la marca (cinta del sombrero)
+       morado = color de la marca (cinta del sombrero); "noche" es el mismo morado, más oscuro
        oro    = acento (medallón del sombrero)
-       blanco = tarjetas y texto sobre morado
-       "noche" es el mismo morado, más oscuro, para texto y fondos. */
+       blanco = tarjetas y texto sobre morado */
     :root {
       --beige: #e8dbc4;
       --beige-claro: #f2e9d8;
@@ -28,14 +29,15 @@
       --morado-luz: #7a4cc0;
       --noche: #2a1547;
       --oro: #f3c301;
+      --oro-sombra: #b89300;
       --blanco: #ffffff;
       --display: "Fraunces", Georgia, "Times New Roman", serif;
       --texto: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-      --ancho: 68rem;
-      --borde: 1.25rem;
-      --sombra: 0 22px 44px -18px rgba(42, 21, 71, .55), 0 6px 14px -8px rgba(42, 21, 71, .35);
+      --ancho: 70rem;
+      --borde: 1.5rem;
+      --sombra: 0 26px 50px -20px rgba(42, 21, 71, .55), 0 8px 16px -10px rgba(42, 21, 71, .35);
+      --resorte: cubic-bezier(.3, 1.5, .5, 1);
       --velo: 0;
-      --giro: 0;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -46,7 +48,7 @@
       color: var(--noche);
       font-family: var(--texto);
       font-size: 1.0625rem;
-      line-height: 1.55;
+      line-height: 1.6;
       overflow-x: hidden;
     }
     img { display: block; max-width: 100%; }
@@ -59,56 +61,64 @@
 
     .contenedor { width: min(100% - 2.5rem, var(--ancho)); margin-inline: auto; }
     h1, h2 { font-family: var(--display); font-variation-settings: "SOFT" 100; line-height: 1.02; letter-spacing: -0.01em; }
-    h2 { font-size: clamp(2.2rem, 8vw, 3.4rem); font-weight: 800; color: var(--morado); }
+    h2 { font-size: clamp(2.4rem, 9vw, 3.6rem); font-weight: 800; color: var(--morado); }
 
     /* ───────── Fondo fijo: la casa, que se funde a beige al bajar ───────── */
-    .fondo { position: fixed; inset: 0; height: 100lvh; z-index: 0; background: var(--noche); overflow: hidden; }
-    /* en celular la casa ocupa la parte de arriba y debajo queda morado para el texto */
+    .fondo { position: fixed; inset: 0; height: 100vh; height: 100lvh; z-index: 0; background: var(--noche); overflow: hidden; }
     .fondo img {
-      width: 100%; height: 66%; object-fit: cover; object-position: 50% 35%;
-      transform: scale(calc(1.03 + var(--velo) * .12));
+      width: 100%; height: 64%; object-fit: cover; object-position: 50% 35%;
+      transform: scale(calc(1.03 + var(--velo) * .14));
       transform-origin: 50% 70%;
     }
     .fondo-tinte {
       position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(42, 21, 71, .55) 0%, rgba(42, 21, 71, .08) 16%, rgba(42, 21, 71, .1) 34%, rgba(42, 21, 71, .82) 54%, var(--noche) 66%);
+      background: linear-gradient(180deg, rgba(42, 21, 71, .6) 0%, rgba(42, 21, 71, .08) 15%, rgba(42, 21, 71, .1) 32%, rgba(42, 21, 71, .82) 52%, var(--noche) 64%);
     }
     .fondo-velo { position: absolute; inset: 0; background: var(--beige); opacity: var(--velo); }
-    main, .barra { position: relative; z-index: 1; }
+    main { position: relative; z-index: 1; }
 
-    /* ───────── Barra superior: logo + estado de hoy ───────── */
+    /* ───────── Barra superior: logo + aviso de horario ───────── */
     .barra {
       position: fixed; inset: 0 0 auto 0; z-index: 30;
       color: var(--blanco);
-      transition: background-color .35s, box-shadow .35s, color .35s;
+      transition: background-color .4s, box-shadow .4s, color .4s;
     }
-    .barra.solida { background: rgba(232, 219, 196, .92); backdrop-filter: blur(10px); color: var(--noche); box-shadow: 0 8px 24px -14px rgba(42, 21, 71, .6); }
-    .barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-block: .55rem; }
-    .marca { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1rem; line-height: 1.05; }
-    .marca img { width: 46px; height: 46px; border-radius: 50%; background: var(--blanco); border: 2px solid var(--oro); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+    .barra.solida { background: rgba(232, 219, 196, .93); backdrop-filter: blur(10px); color: var(--noche); box-shadow: 0 10px 26px -16px rgba(42, 21, 71, .6); }
+    .barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-block: .7rem; }
+    .marca { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: .95rem; line-height: 1.08; }
+    .marca span { white-space: nowrap; }
+    .marca img { width: 44px; height: 44px; border-radius: 50%; background: var(--blanco); border: 2px solid var(--oro); flex: none; transition: transform .5s var(--resorte); }
     .marca:hover img { transform: rotate(-12deg) scale(1.08); }
+
     .estado {
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .4rem .75rem; border-radius: 999px;
-      background: rgba(42, 21, 71, .55); color: var(--blanco);
-      font-size: .82rem; font-weight: 600; line-height: 1.2; text-align: right; text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, .28);
+      display: inline-flex; align-items: center; gap: .5rem; flex: none;
+      padding: .3rem .85rem .3rem .3rem; border-radius: 999px;
+      background: rgba(42, 21, 71, .62); color: var(--blanco);
+      border: 1px solid rgba(255, 255, 255, .26);
+      backdrop-filter: blur(6px);
+      text-decoration: none; line-height: 1.18;
+      transition: transform .3s var(--resorte), background-color .3s;
     }
+    .estado:hover { transform: translateY(-2px); }
     .barra.solida .estado { background: var(--noche); border-color: transparent; }
-    .estado i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--oro); flex: none; box-shadow: 0 0 0 0 rgba(243, 195, 1, .7); animation: latido 2s infinite; }
-    .estado.cerrado i { background: transparent; border: 2px solid var(--blanco); animation: none; }
-    @keyframes latido { 70% { box-shadow: 0 0 0 .5rem rgba(243, 195, 1, 0); } 100% { box-shadow: 0 0 0 0 rgba(243, 195, 1, 0); } }
+    .reloj { display: grid; place-items: center; width: 1.85rem; height: 1.85rem; border-radius: 50%; background: rgba(255, 255, 255, .16); flex: none; }
+    .reloj svg { width: 1.05rem; height: 1.05rem; }
+    .estado.abierto .reloj { background: var(--oro); color: var(--noche); animation: latido 2.2s infinite; }
+    @keyframes latido { 0% { box-shadow: 0 0 0 0 rgba(243, 195, 1, .65); } 70%, 100% { box-shadow: 0 0 0 .55rem rgba(243, 195, 1, 0); } }
+    .estado-texto { display: grid; text-align: left; }
+    .estado-texto b { font-size: .8rem; font-weight: 700; white-space: nowrap; }
+    .estado-texto span { font-size: .72rem; opacity: .85; white-space: nowrap; }
 
     /* ───────── Botones: dos formas distintas, los dos se alzan y brillan ───────── */
     .boton-oro {
       position: relative; overflow: hidden; isolation: isolate;
       display: inline-flex; align-items: center; gap: .6rem;
-      min-height: 54px; padding: .8rem 1.4rem;
+      min-height: 56px; padding: .85rem 1.5rem;
       border: 0; border-radius: 14px; cursor: pointer;
       background: var(--oro); color: var(--noche);
       font-weight: 700; font-size: 1.05rem; text-decoration: none;
-      box-shadow: 0 6px 0 #b89300, 0 16px 24px -10px rgba(0, 0, 0, .55);
-      transition: transform .22s cubic-bezier(.3, 1.4, .5, 1), box-shadow .22s;
+      box-shadow: 0 6px 0 var(--oro-sombra), 0 16px 24px -10px rgba(0, 0, 0, .55);
+      transition: transform .22s var(--resorte), box-shadow .22s;
     }
     .boton-oro svg { width: 1.2em; height: 1.2em; flex: none; }
     .boton-oro::after {
@@ -118,22 +128,22 @@
     }
     .boton-oro:hover, .boton-oro:focus-visible {
       transform: translateY(-5px);
-      box-shadow: 0 11px 0 #b89300, 0 0 0 5px rgba(243, 195, 1, .3), 0 26px 34px -10px rgba(243, 195, 1, .6);
+      box-shadow: 0 11px 0 var(--oro-sombra), 0 0 0 5px rgba(243, 195, 1, .3), 0 26px 34px -10px rgba(243, 195, 1, .6);
     }
     .boton-oro:hover::after, .boton-oro:focus-visible::after { transform: translateX(120%); transition: transform .7s ease; }
-    .boton-oro:active { transform: translateY(4px); box-shadow: 0 2px 0 #b89300, 0 6px 10px -6px rgba(0, 0, 0, .5); }
+    .boton-oro:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--oro-sombra), 0 6px 10px -6px rgba(0, 0, 0, .5); }
 
     .enlace-flecha {
       display: inline-flex; align-items: center; gap: .7rem;
-      min-height: 54px; padding: .4rem .2rem;
+      min-height: 56px; padding: .4rem .2rem;
       font-weight: 700; font-size: 1.05rem; text-decoration: none; color: inherit;
       background: linear-gradient(currentColor, currentColor) 0 calc(100% - 10px) / calc(100% - 3.4rem) 2px no-repeat;
-      transition: transform .22s cubic-bezier(.3, 1.4, .5, 1);
+      transition: transform .22s var(--resorte);
     }
     .enlace-flecha span {
       display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%;
       border: 2px solid currentColor;
-      transition: transform .3s cubic-bezier(.3, 1.4, .5, 1), background-color .25s, color .25s, box-shadow .25s, border-color .25s;
+      transition: transform .3s var(--resorte), background-color .25s, color .25s, box-shadow .25s, border-color .25s;
     }
     .enlace-flecha svg { width: 1.1rem; height: 1.1rem; }
     .enlace-flecha:hover, .enlace-flecha:focus-visible { transform: translateY(-4px); }
@@ -144,67 +154,86 @@
     }
     .enlace-flecha:active { transform: translateY(1px); }
 
-    /* ───────── Portada ───────── */
-    .portada { min-height: 100svh; display: grid; align-items: end; padding: 6rem 0 8.4rem; color: var(--blanco); position: relative; }
-    .portada-texto { opacity: calc(1 - var(--velo) * 2.6); transform: translateY(calc(var(--velo) * -3rem)); }
-    .medallon { width: 64px; height: 64px; margin-bottom: 1rem; filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .5)); animation: flotar 5s ease-in-out infinite; }
-    @keyframes flotar { 50% { transform: translateY(-8px) rotate(4deg); } }
-    h1 { font-size: clamp(3.1rem, 15.5vw, 6.2rem); font-weight: 900; text-shadow: 0 4px 24px rgba(0, 0, 0, .45); }
+    /* ───────── Portada: ocupa la pantalla completa ───────── */
+    .portada {
+      min-height: 100vh; min-height: 100lvh;
+      display: grid; align-items: end;
+      padding: 7rem 0 7.5rem;
+      padding-bottom: calc(7.5rem + (100lvh - 100svh));
+      color: var(--blanco); position: relative;
+    }
+    .portada-texto { opacity: calc(1 - var(--velo) * 2.2); transform: translateY(calc(var(--velo) * -3rem)); }
+    h1 { font-size: clamp(3.3rem, 16vw, 6.4rem); font-weight: 900; text-shadow: 0 4px 24px rgba(0, 0, 0, .45); }
     h1 span { display: block; }
-    .lema { margin-top: 1rem; font-size: 1.2rem; max-width: 30ch; color: rgba(255, 255, 255, .92); }
-    .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; margin-top: 1.6rem; }
+    .lema { margin-top: 1.4rem; font-size: 1.22rem; max-width: 30ch; color: rgba(255, 255, 255, .92); }
+    .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; margin-top: 2.2rem; }
     .baja {
-      position: absolute; left: 50%; bottom: 5.4rem; translate: -50% 0;
-      width: 24px; height: 36px; border: 2px solid rgba(255, 255, 255, .7); border-radius: 999px;
-      opacity: calc(1 - var(--velo) * 4);
+      position: absolute; left: 50%; translate: -50% 0;
+      bottom: 2.2rem; bottom: calc(2.2rem + (100lvh - 100svh));
+      width: 24px; height: 38px; border: 2px solid rgba(255, 255, 255, .7); border-radius: 999px;
+      opacity: calc(1 - var(--velo) * 5);
     }
     .baja::after { content: ""; position: absolute; left: 50%; top: 7px; width: 4px; height: 9px; margin-left: -2px; border-radius: 4px; background: var(--oro); animation: rueda 1.8s infinite; }
-    @keyframes rueda { 60% { transform: translateY(14px); opacity: 0; } 100% { opacity: 0; } }
+    @keyframes rueda { 60% { transform: translateY(13px); opacity: 0; } 100% { opacity: 0; } }
 
-    /* ───────── Secciones sobre beige ───────── */
-    .historia { background: var(--beige); padding: 0 0 4rem; position: relative; }
-    /* falda: el beige sube difuminado sobre la foto */
-    .historia::before { content: ""; position: absolute; inset: -5rem 0 auto 0; height: 5rem; background: linear-gradient(180deg, rgba(232, 219, 196, 0), var(--beige)); pointer-events: none; }
+    /* ───────── Historia ───────── */
+    /* arriba es transparente: la foto se va fundiendo con el beige poco a poco */
+    .historia { padding: 9rem 0 7rem; background: linear-gradient(180deg, rgba(232, 219, 196, 0) 0, var(--beige) 15rem); }
     .tarjeta-historia {
-      position: relative; margin-top: -1.5rem;
+      position: relative;
       background: var(--blanco); border-radius: var(--borde);
-      padding: 4.2rem 1.4rem 1.6rem;
+      padding: 5.2rem 1.6rem 2.2rem;
       box-shadow: var(--sombra);
     }
     .tarjeta-historia > img {
-      position: absolute; top: -3.2rem; left: 1.2rem;
-      width: 104px; height: 104px; border-radius: 50%;
+      position: absolute; top: -3.4rem; left: 1.4rem;
+      width: 108px; height: 108px; border-radius: 50%;
       background: var(--blanco); border: 4px solid var(--oro);
       box-shadow: 0 0 0 5px var(--morado), 0 14px 22px -8px rgba(42, 21, 71, .6);
-      transition: transform .6s cubic-bezier(.3, 1.6, .5, 1);
+      transition: transform .6s var(--resorte);
     }
     .tarjeta-historia:hover > img { transform: rotate(-10deg) scale(1.06); }
-    .tarjeta-historia p { margin-top: .9rem; font-size: 1.12rem; max-width: 46ch; }
-    .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-top: 1.6rem; padding-top: 1.3rem; border-top: 2px dashed rgba(86, 45, 140, .3); }
-    .cifras strong { display: block; font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 900; font-size: clamp(1.7rem, 7.4vw, 2.6rem); line-height: 1; color: var(--morado); font-variant-numeric: tabular-nums; }
-    .cifras span { display: block; margin-top: .35rem; font-size: .86rem; line-height: 1.25; color: rgba(42, 21, 71, .78); }
+    .tarjeta-historia > p { margin-top: 1.3rem; font-size: 1.14rem; line-height: 1.7; max-width: 46ch; }
+
+    .cifras { margin-top: 2.4rem; }
+    .cifra { display: grid; grid-template-columns: 6.4rem 1fr; gap: 1.1rem; align-items: center; padding: 1.4rem 0; border-top: 2px dashed rgba(86, 45, 140, .28); }
+    .cifra strong { font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 900; font-size: 2.6rem; line-height: .95; color: var(--morado); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .cifra strong small { font-size: .42em; font-weight: 700; }
+    .cifra-anio strong small { display: block; margin-bottom: .2rem; }
+    .cifra p { font-size: 1rem; line-height: 1.4; color: rgba(42, 21, 71, .82); }
+
+    .estrellas { position: relative; display: inline-flex; margin-bottom: .4rem; }
+    .estrellas-fondo, .estrellas-llenas { display: flex; gap: .15rem; }
+    .estrellas svg { width: 1.45rem; height: 1.45rem; flex: none; }
+    .estrellas-fondo svg { fill: rgba(86, 45, 140, .16); }
+    .estrellas-llenas { position: absolute; top: 0; left: 0; bottom: 0; width: 90.8%; overflow: hidden; }
+    .estrellas-llenas svg { fill: var(--oro); stroke: var(--oro-sombra); stroke-width: .9; }
+    .js .estrellas-llenas { width: 0; transition: width 1.6s cubic-bezier(.3, .8, .3, 1) .5s; }
+    .js .visto .estrellas-llenas { width: 90.8%; }
 
     /* ───────── Carta: panel que se desliza ───────── */
-    .carta { background: var(--beige); padding: 1rem 0 4.5rem; position: relative; overflow: hidden; }
-    /* bloque morado detrás de los paneles, para dar capas */
-    .carta::before { content: ""; position: absolute; inset: 21rem -10% 2.2rem 18%; border-radius: 3rem 0 0 3rem; background: linear-gradient(160deg, var(--morado), var(--noche)); transform: rotate(-2deg); }
-    .carta > * { position: relative; }
-    .pista { display: inline-flex; align-items: center; gap: .6rem; margin-top: .7rem; font-weight: 600; color: var(--morado); transition: opacity .5s; }
+    .carta { padding: 6rem 0 7rem; position: relative; overflow: hidden; }
+    .carta-cabeza p { margin-top: 1rem; font-size: 1.1rem; max-width: 34ch; }
+    .pista { display: inline-flex; align-items: center; gap: .6rem; margin-top: 1.4rem; font-weight: 600; color: var(--morado); transition: opacity .5s; }
     .pista svg { width: 2.2rem; height: 1.4rem; animation: empuje 1.4s ease-in-out infinite; }
     @keyframes empuje { 50% { transform: translateX(-10px); } }
     .pista.ya { opacity: 0; }
 
-    .rotulo { overflow: hidden; margin-top: .6rem; padding-block: .2rem; }
-    .rotulo-pista { display: flex; gap: 1.4rem; width: max-content; padding-inline: max(1.25rem, (100vw - var(--ancho)) / 2); will-change: transform; }
+    .rotulo { overflow: hidden; margin-top: 2rem; padding-block: .3rem; }
+    .rotulo-pista { display: flex; gap: 1.6rem; width: max-content; padding-inline: max(1.25rem, (100vw - var(--ancho)) / 2); will-change: transform; }
     .rotulo-pista span {
       font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 900;
-      font-size: clamp(3.2rem, 16vw, 6rem); line-height: 1; letter-spacing: -0.02em;
+      font-size: clamp(3.4rem, 17vw, 6.4rem); line-height: 1; letter-spacing: -0.02em;
       color: var(--morado); opacity: .2; transform-origin: 0 80%;
     }
 
+    /* escenario: el bloque morado detrás de los paneles da profundidad */
+    .escenario { position: relative; margin-top: 1.2rem; }
+    .escenario::before { content: ""; position: absolute; inset: 5rem -12% .4rem 14%; border-radius: 3rem 0 0 3rem; background: linear-gradient(160deg, var(--morado), var(--noche)); transform: rotate(-2deg); }
     .riel {
-      display: flex; gap: 1rem;
-      margin-top: .8rem; padding-block: .6rem 2.2rem;
+      position: relative;
+      display: flex; gap: 1.1rem;
+      padding-block: 1rem 3rem;
       padding-inline: max(1.25rem, (100vw - var(--ancho)) / 2);
       overflow-x: auto; overscroll-behavior-x: contain;
       scroll-snap-type: x mandatory;
@@ -214,68 +243,107 @@
     .riel::-webkit-scrollbar { display: none; }
     .riel.arrastrando { cursor: grabbing; scroll-snap-type: none; user-select: none; }
     .panel {
-      flex: 0 0 min(87%, 46rem);
+      flex: 0 0 min(87%, 48rem);
       scroll-snap-align: start;
       background: linear-gradient(180deg, var(--blanco), var(--beige-claro));
-      border-radius: 1.6rem; padding: 1.3rem 1.2rem 1.6rem;
+      border-radius: 1.8rem; padding: 2rem 1.5rem 2.6rem;
       box-shadow: var(--sombra);
     }
-    .panel > p { color: rgba(42, 21, 71, .8); font-weight: 500; }
+    .panel > p { color: rgba(42, 21, 71, .8); font-weight: 500; font-size: 1.05rem; }
 
-    /* El "empujoncito": una sola vez, cuando el panel entra en pantalla */
+    /* empujoncito: una sola vez, cuando el panel entra en pantalla */
     @keyframes empujon { 0%, 100% { transform: translateX(0); } 35% { transform: translateX(-5rem); } 62% { transform: translateX(.6rem); } }
     .riel.empujar .panel { animation: empujon 1.15s cubic-bezier(.3, .7, .3, 1) .2s 1; }
 
-    .avance { width: min(100% - 2.5rem, 14rem); height: 6px; margin: 0 auto; border-radius: 999px; background: rgba(255, 255, 255, .35); overflow: hidden; }
+    .avance { position: relative; width: min(100% - 2.5rem, 14rem); height: 6px; margin: .4rem auto 0; border-radius: 999px; background: rgba(255, 255, 255, .35); overflow: hidden; }
     .avance i { display: block; height: 100%; width: 34%; border-radius: inherit; background: var(--oro); }
 
     /* platos: la foto va dentro de un círculo con aro morado y dorado */
-    .plato { all: unset; box-sizing: border-box; cursor: pointer; display: grid; justify-items: center; gap: .55rem; width: 100%; text-align: center; -webkit-tap-highlight-color: transparent; }
+    .plato { all: unset; box-sizing: border-box; cursor: pointer; display: grid; justify-items: center; gap: .8rem; width: 100%; text-align: center; -webkit-tap-highlight-color: transparent; }
     .plato:focus-visible { outline: 3px solid var(--oro); outline-offset: 6px; border-radius: 1rem; }
     .circulo {
+      position: relative; overflow: hidden;
       display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; padding: 6px;
       background: conic-gradient(from 200deg, var(--oro), var(--morado) 22%, var(--morado-luz) 40%, var(--oro) 52%, var(--morado) 74%, var(--noche) 88%, var(--oro));
       box-shadow: 0 18px 26px -12px rgba(42, 21, 71, .7), 0 3px 0 rgba(42, 21, 71, .18);
-      transition: transform .4s cubic-bezier(.3, 1.5, .5, 1), box-shadow .4s;
+      transition: transform .45s var(--resorte), box-shadow .45s;
     }
-    .circulo img { width: 100%; height: 100%; border-radius: 50%; border: 5px solid var(--blanco); object-fit: cover; rotate: calc(var(--giro) * 1deg); }
-    .plato:hover .circulo, .plato:focus-visible .circulo { transform: translateY(-8px) scale(1.04) rotate(3deg); box-shadow: 0 30px 34px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .35); }
-    .plato:active .circulo { transform: scale(.97); }
-    .nombre { font-weight: 700; font-size: .98rem; line-height: 1.2; }
-    .destacado { margin: 1.1rem auto 0; max-width: 17rem; }
-    .destacado .nombre { font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 800; font-size: 1.3rem; color: var(--morado); }
-    .platos { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem 1rem; margin-top: 1.5rem; }
+    .circulo img { width: 100%; height: 100%; border-radius: 50%; border: 5px solid var(--blanco); object-fit: cover; rotate: calc((var(--giro, 0) + var(--vuelta, 0)) * 1deg); }
+    /* destello que cruza el plato cuando se resalta */
+    .circulo::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+      background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .6) 50%, transparent 62%);
+      transform: translateX(-130%);
+    }
+    .nombre { font-weight: 700; font-size: 1.02rem; line-height: 1.25; transition: color .3s; }
+
+    /* plato resaltado: con el mouse (computadora) o con el foco que recorre los platos (celular) */
+    .plato.foco .circulo, .plato:focus-visible .circulo {
+      transform: translateY(-10px) scale(1.06) rotate(3deg);
+      box-shadow: 0 30px 34px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .42), 0 0 36px 6px rgba(243, 195, 1, .45);
+    }
+    .plato.foco .circulo::after, .plato:focus-visible .circulo::after { transform: translateX(130%); transition: transform .9s ease .05s; }
+    .plato.foco .nombre { color: var(--morado); }
+    @media (hover: hover) {
+      .plato:hover .circulo {
+        transform: translateY(-10px) scale(1.06) rotate(3deg);
+        box-shadow: 0 30px 34px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .42), 0 0 36px 6px rgba(243, 195, 1, .45);
+      }
+      .plato:hover .circulo::after { transform: translateX(130%); transition: transform .9s ease .05s; }
+      .plato:hover .nombre { color: var(--morado); }
+    }
+    .plato:active .circulo { transform: scale(.95); transition-duration: .12s; }
+
+    /* al llegar a un panel, los platos saltan uno por uno */
+    @keyframes saltar {
+      0%, 100% { transform: none; }
+      35% { transform: translateY(-16px) scale(1.08); box-shadow: 0 30px 34px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .45), 0 0 40px 8px rgba(243, 195, 1, .5); }
+      62% { transform: translateY(3px) scale(.98); }
+    }
+    .plato.saltar .circulo, .plato.saltar .arco { animation: saltar .8s cubic-bezier(.3, .8, .4, 1) calc(var(--n, 0) * 130ms); }
+
+    .destacado { margin: 2rem auto 0; max-width: 15.5rem; }
+    .destacado .nombre { font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 800; font-size: 1.35rem; color: var(--morado); }
+    .platos { display: grid; grid-template-columns: 1fr 1fr; gap: 2.6rem 1.5rem; margin-top: 2.8rem; }
 
     /* bebidas: copa recortada sobre un arco morado; la copa sobresale por arriba */
-    .copas { display: grid; grid-template-columns: 1fr 1fr; gap: 2.6rem 1rem; margin-top: 2.6rem; }
+    .copas { display: grid; grid-template-columns: 1fr 1fr; gap: 3.6rem 1.5rem; margin-top: 3.4rem; }
     .arco {
       position: relative; display: block;
       width: 100%; aspect-ratio: 3 / 3.9; border-radius: 999px 999px 1.1rem 1.1rem;
       background: radial-gradient(110% 70% at 50% 100%, var(--morado-luz) 0%, var(--morado) 48%, var(--noche) 100%);
       box-shadow: inset 0 0 0 2px rgba(243, 195, 1, .7), inset 0 -18px 30px -10px rgba(243, 195, 1, .35), 0 18px 26px -12px rgba(42, 21, 71, .7);
-      transition: transform .4s cubic-bezier(.3, 1.5, .5, 1), box-shadow .4s;
+      transition: transform .45s var(--resorte), box-shadow .45s;
     }
-    .arco img { position: absolute; left: 50%; bottom: 0; translate: -50% 0; height: 112%; width: auto; max-width: none; filter: drop-shadow(0 10px 10px rgba(0, 0, 0, .45)); transform-origin: 50% 100%; transition: transform .45s cubic-bezier(.3, 1.5, .5, 1); }
+    .arco img { position: absolute; left: 50%; bottom: 0; translate: -50% 0; height: 112%; width: auto; max-width: none; filter: drop-shadow(0 10px 10px rgba(0, 0, 0, .45)); transform-origin: 50% 100%; transition: transform .5s var(--resorte); }
     .arco.bajo img { height: 78%; }
-    .plato:hover .arco, .plato:focus-visible .arco { transform: translateY(-6px); box-shadow: inset 0 0 0 2px var(--oro), inset 0 -18px 30px -10px rgba(243, 195, 1, .55), 0 28px 30px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .3); }
-    .plato:hover .arco img, .plato:focus-visible .arco img { transform: rotate(-5deg) scale(1.05); }
+    .plato.foco .arco, .plato:focus-visible .arco { transform: translateY(-8px); box-shadow: inset 0 0 0 2px var(--oro), inset 0 -18px 30px -10px rgba(243, 195, 1, .6), 0 28px 30px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .35), 0 0 36px 6px rgba(243, 195, 1, .4); }
+    .plato.foco .arco img, .plato:focus-visible .arco img { transform: rotate(-6deg) scale(1.06); }
+    @media (hover: hover) {
+      .plato:hover .arco { transform: translateY(-8px); box-shadow: inset 0 0 0 2px var(--oro), inset 0 -18px 30px -10px rgba(243, 195, 1, .6), 0 28px 30px -14px rgba(42, 21, 71, .75), 0 0 0 6px rgba(243, 195, 1, .35), 0 0 36px 6px rgba(243, 195, 1, .4); }
+      .plato:hover .arco img { transform: rotate(-6deg) scale(1.06); }
+    }
 
-    .tambien { margin-top: 1.7rem; padding-top: 1.1rem; border-top: 2px dashed rgba(86, 45, 140, .25); }
-    .tambien > strong { font-size: .95rem; color: var(--morado); }
-    .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .65rem; }
-    .chips li { padding: .42rem .85rem; border-radius: 999px; background: rgba(86, 45, 140, .1); font-weight: 600; font-size: .93rem; transition: transform .25s cubic-bezier(.3, 1.5, .5, 1), background-color .25s, color .25s, box-shadow .25s; }
-    .chips li:hover { transform: translateY(-4px); background: var(--morado); color: var(--blanco); box-shadow: 0 10px 16px -8px rgba(42, 21, 71, .7); }
-    .postres { margin-top: 1.1rem; }
-    .postres li { display: flex; align-items: baseline; gap: .8rem; padding: .78rem .4rem; border-bottom: 2px dashed rgba(86, 45, 140, .25); font-weight: 600; break-inside: avoid; transition: transform .25s, background-color .25s; border-radius: .5rem; }
+    .tambien { margin-top: 2.8rem; padding-top: 1.5rem; border-top: 2px dashed rgba(86, 45, 140, .25); }
+    .tambien > strong { font-size: .98rem; color: var(--morado); }
+    .chips { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: .9rem; }
+    .chips li { padding: .5rem .95rem; border-radius: 999px; background: rgba(86, 45, 140, .1); font-weight: 600; font-size: .95rem; transition: transform .25s var(--resorte), background-color .25s, color .25s, box-shadow .25s; }
+    @media (hover: hover) { .chips li:hover { transform: translateY(-4px); background: var(--morado); color: var(--blanco); box-shadow: 0 10px 16px -8px rgba(42, 21, 71, .7); } }
+
+    .postres { margin-top: 1.6rem; }
+    .postres li { display: flex; align-items: baseline; gap: .9rem; padding: 1rem .5rem; border-bottom: 2px dashed rgba(86, 45, 140, .22); font-weight: 600; font-size: 1.05rem; break-inside: avoid; border-radius: .6rem; transition: transform .3s var(--resorte), background-color .3s; }
     .postres li::before { content: ""; flex: none; width: .7rem; height: .7rem; border-radius: 50%; background: var(--oro); box-shadow: 0 0 0 3px var(--morado); translate: 0 -1px; }
-    .postres li:hover { transform: translateX(8px); background: rgba(243, 195, 1, .16); }
-    .postres small { display: block; font-weight: 400; font-size: .92rem; color: rgba(42, 21, 71, .75); }
-    .nota { margin-top: 1rem; font-size: .92rem; }
+    .postres li.foco { transform: translateX(10px); background: rgba(243, 195, 1, .2); }
+    @media (hover: hover) { .postres li:hover { transform: translateX(10px); background: rgba(243, 195, 1, .2); } }
+    @keyframes asomar { 40% { transform: translateX(12px); background: rgba(243, 195, 1, .26); } }
+    .postres li.saltar { animation: asomar .7s ease calc(var(--n, 0) * 90ms); }
+    .postres small { display: block; font-weight: 400; font-size: .93rem; color: rgba(42, 21, 71, .75); }
+    .nota { margin-top: 1.4rem; font-size: .95rem; }
 
     /* visor: al tocar un plato se agranda */
     .visor { border: 0; padding: 0; background: transparent; max-width: none; max-height: none; width: 100%; height: 100%; overflow: hidden; }
     .visor::backdrop { background: rgba(42, 21, 71, .88); backdrop-filter: blur(6px); }
-    .visor-caja { height: 100%; display: grid; place-content: center; justify-items: center; gap: 1.2rem; padding: 2rem; color: var(--blanco); text-align: center; }
+    .visor-caja { height: 100%; display: grid; place-content: center; justify-items: center; gap: 1.4rem; padding: 2rem; color: var(--blanco); text-align: center; }
     .visor[open] .visor-arte { animation: servir .55s cubic-bezier(.2, 1.3, .4, 1); }
     @keyframes servir { from { transform: scale(.4) rotate(-40deg); opacity: 0; } }
     .visor-arte { width: min(80vw, 24rem); }
@@ -284,94 +352,116 @@
     .visor-cerrar { all: unset; cursor: pointer; padding: .6rem 1.2rem; border-radius: 999px; border: 2px solid rgba(255, 255, 255, .6); font-weight: 600; }
     .visor-cerrar:hover, .visor-cerrar:focus-visible { background: var(--oro); border-color: var(--oro); color: var(--noche); }
 
-    /* ───────── Visítenos ───────── */
-    .visita { background: var(--beige); padding: 1rem 0 0; position: relative; z-index: 2; }
-    .visita p { margin-top: .8rem; font-size: 1.12rem; max-width: 40ch; }
-    .lugar { position: relative; margin-top: 1.8rem; margin-bottom: -5rem; }
+    /* ───────── Visítenos: foto de la casa y mapa, cada uno con su espacio ───────── */
+    .visita { background: var(--beige); padding: 7rem 0 7.5rem; }
+    .visita-grid { display: grid; gap: 3.4rem; }
+    .visita-texto p { margin-top: 1.1rem; font-size: 1.14rem; max-width: 36ch; }
     .foto-casa {
-      position: relative; z-index: 2; width: 58%; margin: 0 .4rem -3.2rem auto;
-      background: var(--blanco); padding: 6px 6px 1.3rem; border-radius: .5rem;
-      box-shadow: var(--sombra); transform: rotate(4deg);
-      transition: transform .5s cubic-bezier(.3, 1.4, .5, 1), box-shadow .5s;
+      justify-self: center; width: min(90%, 26rem);
+      background: var(--blanco); padding: .65rem .65rem 0; border-radius: .7rem;
+      box-shadow: var(--sombra); transform: rotate(-2.5deg);
+      transition: transform .5s var(--resorte), box-shadow .5s;
     }
-    .foto-casa img { width: 100%; height: auto; border-radius: .25rem; }
-    .foto-casa:hover { transform: rotate(-2deg) scale(1.08); box-shadow: 0 34px 50px -20px rgba(42, 21, 71, .7), 0 0 0 5px rgba(243, 195, 1, .35); }
-    .mapa {
-      position: relative;
-      border-radius: var(--borde); overflow: hidden; background: var(--blanco); padding: 8px;
-      box-shadow: var(--sombra); transform: rotate(-1.2deg);
-      transition: transform .5s cubic-bezier(.3, 1.4, .5, 1), box-shadow .5s;
-    }
-    .mapa:hover, .mapa:focus-within { transform: rotate(0deg) translateY(-6px); box-shadow: 0 34px 50px -20px rgba(42, 21, 71, .7), 0 0 0 5px rgba(243, 195, 1, .35); }
-    .mapa iframe { display: block; width: 100%; height: 300px; border: 0; border-radius: calc(var(--borde) - 6px); background: var(--beige-claro); }
+    .foto-casa img { width: 100%; height: auto; border-radius: .35rem; }
+    .foto-casa figcaption { padding: 1rem .5rem 1.15rem; text-align: center; font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 700; font-size: 1.08rem; color: var(--morado); }
+    .foto-casa:hover { transform: rotate(0deg) scale(1.03); }
+    .mapa { border-radius: var(--borde); overflow: hidden; border: 3px solid var(--morado); background: var(--beige-claro); box-shadow: var(--sombra); }
+    .mapa iframe { display: block; width: 100%; height: 340px; border: 0; }
+    .visita-mapa .acciones { margin-top: 2rem; }
 
     /* ───────── Contáctenos: morado con blanco ───────── */
     .contacto {
-      position: relative; color: var(--blanco); padding: 8.5rem 0 2rem;
+      position: relative; color: var(--blanco); padding: 6.5rem 0 2.5rem;
+      border-radius: 2.6rem 2.6rem 0 0;
       background: radial-gradient(90% 60% at 100% 0%, var(--morado) 0%, transparent 70%), radial-gradient(70% 50% at 0% 100%, var(--morado) 0%, transparent 70%), var(--noche);
     }
     .contacto h2 { color: var(--blanco); }
-    .bloques { display: grid; gap: 1rem; margin-top: 1.6rem; }
+    .bloques { display: grid; gap: 1.3rem; margin-top: 2.4rem; }
     .bloque {
-      padding: 1.2rem 1.2rem 1.3rem; border-radius: var(--borde);
+      padding: 1.6rem 1.4rem 1.7rem; border-radius: var(--borde);
       background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .16);
-      transition: transform .3s cubic-bezier(.3, 1.4, .5, 1), background-color .3s, border-color .3s, box-shadow .3s;
+      transition: transform .3s var(--resorte), background-color .3s, border-color .3s, box-shadow .3s;
     }
-    .bloque:hover { transform: translateY(-5px); background: rgba(255, 255, 255, .12); border-color: var(--oro); box-shadow: 0 18px 30px -16px rgba(0, 0, 0, .7); }
+    @media (hover: hover) { .bloque:hover { transform: translateY(-5px); background: rgba(255, 255, 255, .12); border-color: var(--oro); box-shadow: 0 18px 30px -16px rgba(0, 0, 0, .7); } }
     .bloque h3 { display: flex; align-items: center; gap: .55rem; font-size: 1rem; font-weight: 700; color: var(--oro); }
     .bloque h3 svg { width: 1.25rem; height: 1.25rem; }
     .bloque p, .bloque li { font-size: 1.08rem; }
-    .bloque > p, .bloque > ul { margin-top: .6rem; }
-    .horario li { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; padding: .32rem .55rem; margin-inline: -.55rem; border-radius: .5rem; font-size: 1rem; }
+    .bloque > p, .bloque > ul { margin-top: .8rem; }
+    .horario li { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; padding: .4rem .6rem; margin-inline: -.6rem; border-radius: .5rem; font-size: 1rem; }
     .horario li span:last-child { white-space: nowrap; text-align: right; }
     .horario li.hoy { background: var(--oro); color: var(--noche); font-weight: 700; }
     .horario .cerrado { opacity: .7; }
-    .hoy-estado { margin-top: .7rem; font-weight: 600; }
-    .contacto .acciones { margin-top: 1.1rem; }
-    .pie { margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid rgba(255, 255, 255, .18); display: flex; align-items: center; gap: .9rem; font-size: .95rem; color: rgba(255, 255, 255, .85); }
-    .pie img { width: 46px; height: 46px; transition: transform .8s cubic-bezier(.3, 1.3, .5, 1); }
-    .pie:hover img { transform: rotate(360deg); }
+    .horario .cerrado.hoy { opacity: 1; }
+    .hoy-estado { margin-top: .9rem; font-weight: 600; }
+    .contacto .acciones { margin-top: 1.3rem; }
+    .pie { margin-top: 3.4rem; padding-top: 1.6rem; border-top: 1px solid rgba(255, 255, 255, .18); display: flex; align-items: center; gap: 1rem; font-size: .95rem; color: rgba(255, 255, 255, .85); }
+    .pie img { width: 52px; height: 52px; border-radius: 50%; background: var(--blanco); border: 2px solid var(--oro); flex: none; transition: transform .5s var(--resorte); }
+    .pie:hover img { transform: rotate(-12deg) scale(1.06); }
     .pie strong { display: block; font-family: var(--display); font-size: 1.15rem; color: var(--blanco); }
 
     /* ───────── Aparecer al llegar (solo si hay JavaScript) ───────── */
-    .js [data-ap] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .9, .3, 1); transition-delay: calc(var(--i, 0) * 90ms); }
+    .js [data-ap] { opacity: 0; transform: translateY(40px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .9, .3, 1); transition-delay: calc(var(--i, 0) * 110ms); }
     .js [data-ap].visto { opacity: 1; transform: none; }
+    .js .foto-casa[data-ap].visto { transform: rotate(-2.5deg); }
+    .js .foto-casa[data-ap].visto:hover { transform: rotate(0deg) scale(1.03); }
+
+    /* teléfonos angostos: solo el logo en la barra, para que quepa el horario */
+    @media (max-width: 380px) {
+      .marca span { display: none; }
+    }
 
     /* ───────── Pantallas grandes ───────── */
     @media (min-width: 60rem) {
       .fondo img { width: 64%; height: 100%; object-position: 30% 50%; transform-origin: 30% 60%; }
       .fondo-tinte { background: linear-gradient(90deg, rgba(42, 21, 71, .18) 0%, rgba(42, 21, 71, .3) 30%, rgba(42, 21, 71, .88) 54%, var(--noche) 64%), linear-gradient(180deg, rgba(42, 21, 71, .5) 0%, transparent 18%, transparent 70%, rgba(42, 21, 71, .7) 100%); }
-      .portada { align-items: center; }
+      .marca { font-size: 1.05rem; }
+      .marca img { width: 50px; height: 50px; }
+      .estado-texto b { font-size: .9rem; }
+      .estado-texto span { font-size: .8rem; }
+      .portada { align-items: center; padding-bottom: 7rem; }
       .portada-texto { margin-left: 54%; }
-      .estado { font-size: .92rem; }
-      .tarjeta-historia { padding: 2.4rem 2.6rem 2.2rem 11rem; margin-top: -2.5rem; }
-      .tarjeta-historia > img { top: 2.2rem; left: 2.2rem; width: 124px; height: 124px; }
-      .carta::before { inset: 19rem -5% 2.2rem 30%; }
-      .panel { padding: 2rem 2.2rem 2.2rem; }
-      .panel-comida .mesa { display: grid; grid-template-columns: 16rem 1fr; gap: 2.6rem; align-items: center; }
-      .panel-comida .platos .circulo { max-width: 9.5rem; }
-      .destacado { margin-top: 1.4rem; }
-      .platos { margin-top: 1.4rem; gap: 1.4rem 1.6rem; }
-      .copas { grid-template-columns: repeat(4, 1fr); }
-      .postres { columns: 2; column-gap: 2.5rem; }
-      .visita .contenedor { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: start; }
-      .lugar { margin-top: 0; }
-      .foto-casa { width: 44%; margin: 0 -1rem -6rem auto; }
-      .mapa iframe { height: 400px; }
-      .contacto { padding-top: 9rem; }
-      .bloques { grid-template-columns: repeat(3, 1fr); }
+      .historia { padding: 11rem 0 9rem; }
+      .tarjeta-historia { padding: 3rem 3rem 2.6rem 12rem; }
+      .tarjeta-historia > img { top: 2.6rem; left: 2.6rem; width: 128px; height: 128px; }
+      .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2.4rem; padding-top: 1.8rem; border-top: 2px dashed rgba(86, 45, 140, .28); }
+      .cifra { display: block; padding: 0; border: 0; }
+      .cifra strong { font-size: 2.9rem; }
+      .cifra p { margin-top: .5rem; }
+      .cifra-nota { margin-top: .5rem; }
+      .carta { padding: 8rem 0 9rem; }
+      .escenario::before { inset: 6rem -5% .4rem 30%; }
+      .panel { padding: 2.6rem 2.8rem 2.8rem; }
+      .panel-comida .mesa { display: grid; grid-template-columns: 17rem 1fr; gap: 3.4rem; align-items: center; }
+      .destacado { margin-top: 1.8rem; }
+      .platos { margin-top: 1.8rem; gap: 2rem 2.4rem; }
+      .panel-comida .platos .circulo { max-width: 10rem; }
+      .copas { grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+      .postres { columns: 2; column-gap: 3rem; }
+      .visita { padding: 9rem 0 10rem; }
+      .visita-grid { grid-template-columns: 1fr 1.2fr; grid-template-areas: "texto mapa" "foto mapa"; gap: 3rem 4.5rem; align-items: start; }
+      .visita-texto { grid-area: texto; }
+      .foto-casa { grid-area: foto; justify-self: start; width: 82%; }
+      .visita-mapa { grid-area: mapa; }
+      .mapa iframe { height: 520px; }
+      .contacto { padding-top: 8rem; border-radius: 4rem 4rem 0 0; }
+      .bloques { grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
       .js [data-ap] { opacity: 1; transform: none; }
+      .js .estrellas-llenas { width: 90.8%; }
       .fondo img { transform: none; }
       .circulo img { rotate: 0deg; }
     }
   </style>
 </head>
 <body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="estrella" viewBox="0 0 24 24"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z"/></symbol>
+  </svg>
 
   <div class="fondo" aria-hidden="true">
     <picture>
@@ -385,10 +475,13 @@
   <header class="barra" id="barra">
     <div class="contenedor">
       <a class="marca" href="#inicio">
-        <img src="img/logo.png" alt="" width="46" height="46">
+        <img src="img/logo.png" alt="" width="44" height="44">
         <span>La Posada<br>de las Brujas</span>
       </a>
-      <a class="estado" id="estado" href="#contacto"><i></i><span>Martes a domingo desde las 11:00 a.m.</span></a>
+      <a class="estado" id="estado" href="#contacto">
+        <i class="reloj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i>
+        <span class="estado-texto"><b id="estado-a">Horario</b><span id="estado-b">martes a domingo</span></span>
+      </a>
     </div>
   </header>
 
@@ -397,7 +490,6 @@
     <section class="portada" id="inicio">
       <div class="contenedor">
         <div class="portada-texto">
-          <img class="medallon" src="img/medallon.png" alt="" width="64" height="64">
           <h1><span>La Posada</span> <span>de las Brujas</span></h1>
           <p class="lema">Comida casera bien tica, parrilla y cocteles en el centro de Escazú, desde 2012.</p>
           <div class="acciones">
@@ -417,21 +509,37 @@
     <section class="historia">
       <div class="contenedor">
         <div class="tarjeta-historia" data-ap>
-          <img src="img/logo.png" alt="Logo de La Posada de las Brujas: un sombrero de bruja con cinta morada" width="124" height="124">
+          <img src="img/logo.png" alt="Logo de La Posada de las Brujas: un sombrero de bruja con cinta morada" width="128" height="128">
           <h2>Cocina de un escazuceño de corazón</h2>
           <p>Abrimos las puertas en 2012, en la tierra de las brujas. Desde entonces, un gran equipo cocina cada plato con amor y con calidad, como en casa.</p>
           <div class="cifras">
-            <div><strong data-cuenta="2012" data-desde="1990">2012</strong><span>año en que abrimos</span></div>
-            <div><strong data-cuenta="92" data-sufijo=" mil">92 mil</strong><span>seguidores en Facebook</span></div>
-            <div><strong data-cuenta="4.5" data-decimales="1">4,5</strong><span>de 5 en Google, con más de 7.000 reseñas</span></div>
+            <div class="cifra cifra-anio">
+              <strong><small>Desde</small><span data-cuenta="2012" data-desde="1990">2012</span></strong>
+              <p>Cocinando en el centro de Escazú</p>
+            </div>
+            <div class="cifra">
+              <strong><span data-cuenta="92">92</span><small> mil</small></strong>
+              <p>Seguidores en Facebook</p>
+            </div>
+            <div class="cifra">
+              <strong><span data-cuenta="4.5" data-decimales="1">4,5</span></strong>
+              <div class="cifra-nota">
+                <span class="estrellas" role="img" aria-label="4,5 de 5 estrellas">
+                  <span class="estrellas-fondo"><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg></span>
+                  <span class="estrellas-llenas"><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg><svg><use href="#estrella"/></svg></span>
+                </span>
+                <p>De 5 en Google, con más de 7.000 reseñas</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <section class="carta" id="carta">
-      <div class="contenedor" data-ap>
+      <div class="contenedor carta-cabeza" data-ap>
         <h2>Lo que servimos</h2>
+        <p>Casados, bocas, parrilla y cocteles, con sabor de casa.</p>
         <p class="pista" id="pista">
           <svg viewBox="0 0 44 28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M42 14H4M14 4 4 14l10 10"/></svg>
           <span id="pista-texto">Deslice con el dedo</span>
@@ -443,108 +551,113 @@
         <div class="rotulo-pista" id="rotulo"><span>Comida</span><span>Bebidas</span><span>Postres</span></div>
       </div>
 
-      <div class="riel" id="riel" tabindex="0" role="region" aria-label="Carta. Deslice hacia los lados para ver comida, bebidas y postres.">
+      <div class="escenario">
+        <div class="riel" id="riel" tabindex="0" role="region" aria-label="Carta. Deslice hacia los lados para ver comida, bebidas y postres.">
 
-        <article class="panel panel-comida">
-          <h3 class="oculto">Comida</h3>
-          <p>Casados, bocas y parrilla, con sabor de casa. Toque un plato para verlo más grande.</p>
-          <div class="mesa">
-            <button class="plato destacado" type="button" data-nombre="Recién salido de la cocina">
-              <span class="circulo"><img src="img/plato-bbq.webp" alt="Plato con carne en salsa BBQ, ensalada, aguacate y croquetas" width="410" height="410" loading="lazy" draggable="false"></span>
-              <span class="nombre">Recién salido de la cocina</span>
-            </button>
-            <div class="platos">
-              <button class="plato" type="button" data-nombre="Patacones con carne mechada">
-                <span class="circulo"><img src="img/patacones-carne-mechada.webp" alt="Patacones tostados con carne mechada" width="640" height="640" loading="lazy" draggable="false"></span>
-                <span class="nombre">Patacones con carne mechada</span>
+          <article class="panel panel-comida">
+            <h3 class="oculto">Comida</h3>
+            <p>Toque un plato para verlo más grande.</p>
+            <div class="mesa">
+              <button class="plato destacado" type="button" data-nombre="Recién salido de la cocina">
+                <span class="circulo"><img src="img/plato-bbq.webp" alt="Plato con carne en salsa BBQ, ensalada, aguacate y croquetas" width="410" height="410" loading="lazy" draggable="false"></span>
+                <span class="nombre">Recién salido de la cocina</span>
               </button>
-              <button class="plato" type="button" data-nombre="Arrachera">
-                <span class="circulo"><img src="img/arrachera.webp" alt="Arrachera a la parrilla con chimichurri, arroz y puré" width="600" height="600" loading="lazy" draggable="false"></span>
-                <span class="nombre">Arrachera</span>
+              <div class="platos">
+                <button class="plato" type="button" data-nombre="Patacones con carne mechada">
+                  <span class="circulo"><img src="img/patacones-carne-mechada.webp" alt="Patacones tostados con carne mechada" width="640" height="640" loading="lazy" draggable="false"></span>
+                  <span class="nombre">Patacones con carne mechada</span>
+                </button>
+                <button class="plato" type="button" data-nombre="Arrachera">
+                  <span class="circulo"><img src="img/arrachera.webp" alt="Arrachera a la parrilla con chimichurri, arroz y puré" width="600" height="600" loading="lazy" draggable="false"></span>
+                  <span class="nombre">Arrachera</span>
+                </button>
+                <button class="plato" type="button" data-nombre="Chifrijo">
+                  <span class="circulo"><img src="img/chifrijo.webp" alt="Chifrijo con frijoles, chicharrón, pico de gallo y aguacate" width="560" height="560" loading="lazy" draggable="false"></span>
+                  <span class="nombre">Chifrijo</span>
+                </button>
+                <button class="plato" type="button" data-nombre="Spaghetti en salsa de tomate">
+                  <span class="circulo"><img src="img/spaghetti.webp" alt="Spaghetti en salsa de tomate con carne y verduras" width="640" height="640" loading="lazy" draggable="false"></span>
+                  <span class="nombre">Spaghetti en salsa de tomate</span>
+                </button>
+              </div>
+            </div>
+            <div class="tambien">
+              <strong>También en la carta</strong>
+              <ul class="chips"><li>Casados</li><li>Ceviches</li><li>Chicharrones</li><li>Chalupas</li><li>Burritos</li><li>Costilla BBQ</li></ul>
+            </div>
+          </article>
+
+          <article class="panel panel-bebidas">
+            <h3 class="oculto">Bebidas</h3>
+            <p>Cocteles de la barra, cervezas, naturales y café.</p>
+            <div class="copas">
+              <button class="plato" type="button" data-nombre="Sangría">
+                <span class="arco"><img src="img/sangria.webp" alt="Dos copas de sangría con fruta picada" width="537" height="900" loading="lazy" draggable="false"></span>
+                <span class="nombre">Sangría</span>
               </button>
-              <button class="plato" type="button" data-nombre="Chifrijo">
-                <span class="circulo"><img src="img/chifrijo.webp" alt="Chifrijo con frijoles, chicharrón, pico de gallo y aguacate" width="560" height="560" loading="lazy" draggable="false"></span>
-                <span class="nombre">Chifrijo</span>
+              <button class="plato" type="button" data-nombre="Piña colada">
+                <span class="arco bajo"><img src="img/pina-colada.webp" alt="Piña colada con una rodaja de piña" width="465" height="522" loading="lazy" draggable="false"></span>
+                <span class="nombre">Piña colada</span>
               </button>
-              <button class="plato" type="button" data-nombre="Spaghetti en salsa de tomate">
-                <span class="circulo"><img src="img/spaghetti.webp" alt="Spaghetti en salsa de tomate con carne y verduras" width="640" height="640" loading="lazy" draggable="false"></span>
-                <span class="nombre">Spaghetti en salsa de tomate</span>
+              <button class="plato" type="button" data-nombre="Daiquirí de fresa">
+                <span class="arco"><img src="img/daiquiri-fresa.webp" alt="Coctel frozen rosado con una cereza" width="368" height="843" loading="lazy" draggable="false"></span>
+                <span class="nombre">Daiquirí de fresa</span>
+              </button>
+              <button class="plato" type="button" data-nombre="Tequila sunrise">
+                <span class="arco"><img src="img/tequila-sunrise.webp" alt="Coctel naranja con cereza y limón" width="376" height="859" loading="lazy" draggable="false"></span>
+                <span class="nombre">Tequila sunrise</span>
               </button>
             </div>
-          </div>
-          <div class="tambien">
-            <strong>También en la carta</strong>
-            <ul class="chips"><li>Casados</li><li>Ceviches</li><li>Chicharrones</li><li>Chalupas</li><li>Burritos</li><li>Costilla BBQ</li></ul>
-          </div>
-        </article>
+            <div class="tambien">
+              <strong>También en la barra</strong>
+              <ul class="chips"><li>Margaritas</li><li>Mojito</li><li>Cervezas</li><li>Naturales</li><li>Limonada con hierbabuena</li><li>Café</li></ul>
+            </div>
+          </article>
 
-        <article class="panel panel-bebidas">
-          <h3 class="oculto">Bebidas</h3>
-          <p>Cocteles de la barra, cervezas, naturales y café.</p>
-          <div class="copas">
-            <button class="plato" type="button" data-nombre="Sangría">
-              <span class="arco"><img src="img/sangria.webp" alt="Dos copas de sangría con fruta picada" width="537" height="900" loading="lazy" draggable="false"></span>
-              <span class="nombre">Sangría</span>
-            </button>
-            <button class="plato" type="button" data-nombre="Piña colada">
-              <span class="arco bajo"><img src="img/pina-colada.webp" alt="Piña colada con una rodaja de piña" width="465" height="522" loading="lazy" draggable="false"></span>
-              <span class="nombre">Piña colada</span>
-            </button>
-            <button class="plato" type="button" data-nombre="Daiquirí de fresa">
-              <span class="arco"><img src="img/daiquiri-fresa.webp" alt="Coctel frozen rosado con una cereza" width="368" height="843" loading="lazy" draggable="false"></span>
-              <span class="nombre">Daiquirí de fresa</span>
-            </button>
-            <button class="plato" type="button" data-nombre="Tequila sunrise">
-              <span class="arco"><img src="img/tequila-sunrise.webp" alt="Coctel naranja con cereza y limón" width="376" height="859" loading="lazy" draggable="false"></span>
-              <span class="nombre">Tequila sunrise</span>
-            </button>
-          </div>
-          <div class="tambien">
-            <strong>También en la barra</strong>
-            <ul class="chips"><li>Margaritas</li><li>Mojito</li><li>Cervezas</li><li>Naturales</li><li>Limonada con hierbabuena</li><li>Café</li></ul>
-          </div>
-        </article>
+          <article class="panel panel-postres">
+            <h3 class="oculto">Postres</h3>
+            <p>Para cerrar con algo dulce.</p>
+            <ul class="postres">
+              <li><span>Arroz con leche</span></li>
+              <li><span>Cajeta de leche</span></li>
+              <li><span>Cheesecake <small>Fresa o limón</small></span></li>
+              <li><span>Flan <small>Caramelo o coco</small></span></li>
+              <li><span>Helado casero</span></li>
+              <li><span>Pie de limón</span></li>
+              <li><span>Queque personal de cumpleaños</span></li>
+              <li><span>Selva negra</span></li>
+              <li><span>Tres leches</span></li>
+              <li><span>Torta chilena</span></li>
+            </ul>
+            <p class="nota">Pregunte en el local por los precios y la disponibilidad del día.</p>
+          </article>
+        </div>
 
-        <article class="panel panel-postres">
-          <h3 class="oculto">Postres</h3>
-          <p>Para cerrar con algo dulce.</p>
-          <ul class="postres">
-            <li><span>Arroz con leche</span></li>
-            <li><span>Cajeta de leche</span></li>
-            <li><span>Cheesecake <small>Fresa o limón</small></span></li>
-            <li><span>Flan <small>Caramelo o coco</small></span></li>
-            <li><span>Helado casero</span></li>
-            <li><span>Pie de limón</span></li>
-            <li><span>Queque personal de cumpleaños</span></li>
-            <li><span>Selva negra</span></li>
-            <li><span>Tres leches</span></li>
-            <li><span>Torta chilena</span></li>
-          </ul>
-          <p class="nota">Pregunte en el local por los precios y la disponibilidad del día.</p>
-        </article>
+        <div class="avance" aria-hidden="true"><i id="avance"></i></div>
       </div>
-
-      <div class="avance" aria-hidden="true"><i id="avance"></i></div>
     </section>
 
     <section class="visita" id="visita">
-      <div class="contenedor">
-        <div data-ap>
+      <div class="contenedor visita-grid">
+        <div class="visita-texto" data-ap>
           <h2>Visítenos</h2>
           <p>Estamos en la casa blanca con azul, a 350 metros al este de la Municipalidad de Escazú.</p>
+        </div>
+        <figure class="foto-casa" data-ap style="--i:1">
+          <img src="img/casa.jpg" alt="Fachada de La Posada de las Brujas: casa blanca con azul y chimenea de ladrillo" width="760" height="570" loading="lazy">
+          <figcaption>Busque la chimenea de ladrillo</figcaption>
+        </figure>
+        <div class="visita-mapa" data-ap style="--i:2">
+          <div class="mapa">
+            <iframe title="Mapa de La Posada de las Brujas en Escazú" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=La+Posada+de+las+Brujas+Escaz%C3%BA&ll=9.9196355,-84.136587&z=17&output=embed"></iframe>
+          </div>
           <div class="acciones">
             <a class="boton-oro" href="https://www.google.com/maps/search/?api=1&query=La+Posada+de+las+Brujas+Escaz%C3%BA&query_place_id=ChIJExja7Yz8oI8RbmPUolcKoBo" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
               Abrir en Google Maps
             </a>
           </div>
-        </div>
-        <div class="lugar" data-ap style="--i:1">
-        <figure class="foto-casa"><img src="img/casa.jpg" alt="Fachada de La Posada de las Brujas: casa blanca con azul y chimenea de ladrillo" width="760" height="570" loading="lazy"></figure>
-        <div class="mapa">
-          <iframe title="Mapa de La Posada de las Brujas en Escazú" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=La+Posada+de+las+Brujas+Escaz%C3%BA&ll=9.9196355,-84.136587&z=17&output=embed"></iframe>
-        </div>
         </div>
       </div>
     </section>
@@ -554,7 +667,7 @@
         <h2 data-ap>Contáctenos</h2>
         <div class="bloques">
           <div class="bloque" data-ap style="--i:1">
-            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>Dirección</h3>
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Dirección</h3>
             <p>De la Municipalidad de Escazú centro, 350 metros al este. Escazú, San José, Costa Rica.</p>
           </div>
           <div class="bloque" data-ap style="--i:2">
@@ -567,11 +680,11 @@
             <p class="hoy-estado" id="hoy-estado"></p>
           </div>
           <div class="bloque" data-ap style="--i:3">
-            <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.800a15.100 15.100 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.25 11.400 11.400 0 0 0 3.600.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.250.2 2.450.57 3.570a1 1 0 0 1-.25 1L6.600 10.800z"/></svg>Teléfono y redes</h3>
+            <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8z"/></svg>Teléfono y redes</h3>
             <p>2228 1645</p>
             <div class="acciones">
               <a class="boton-oro" href="tel:+50622281645">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.800a15.100 15.100 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.25 11.400 11.400 0 0 0 3.600.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.250.2 2.450.57 3.570a1 1 0 0 1-.25 1L6.600 10.800z"/></svg>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8z"/></svg>
                 Llamar al local
               </a>
               <a class="enlace-flecha" href="https://www.facebook.com/LAPOSADADELASBRUJAS/" target="_blank" rel="noopener">Ver Facebook
@@ -581,7 +694,7 @@
           </div>
         </div>
         <div class="pie">
-          <img src="img/medallon.png" alt="" width="46" height="46" loading="lazy">
+          <img src="img/logo.png" alt="" width="52" height="52" loading="lazy">
           <div><strong>La Posada de las Brujas</strong>Restaurante y bar en Escazú centro, Costa Rica. Desde 2012.</div>
         </div>
       </div>
@@ -602,32 +715,36 @@
       var raiz = document.documentElement;
       raiz.classList.add('js');
       var sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var tactil = window.matchMedia('(hover: none)').matches;
       function limitar(v, a, b) { return Math.min(b, Math.max(a, v)); }
 
-      /* ── 1) Al bajar: la foto de la casa se funde a beige y la barra se vuelve sólida ── */
+      var riel = document.getElementById('riel');
+
+      /* ── 1) Al bajar: la casa se funde a beige despacio, la barra se vuelve sólida y los platos giran ── */
       var barra = document.getElementById('barra');
       var pendiente = false;
       function alBajar() {
         pendiente = false;
-        var alto = window.innerHeight;
-        raiz.style.setProperty('--velo', limitar(window.scrollY / (alto * 0.72), 0, 1).toFixed(3));
-        barra.classList.toggle('solida', window.scrollY > alto * 0.55);
+        var alto = window.innerHeight, y = window.scrollY;
+        raiz.style.setProperty('--velo', limitar((y - alto * 0.1) / (alto * 0.95), 0, 1).toFixed(3));
+        riel.style.setProperty('--vuelta', (y * 0.035).toFixed(1));
+        barra.classList.toggle('solida', y > alto * 0.75);
       }
       window.addEventListener('scroll', function () {
         if (!pendiente) { pendiente = true; requestAnimationFrame(alBajar); }
       }, { passive: true });
       alBajar();
 
-      /* ── 2) Aparecer al llegar + cifras que cuentan ── */
+      /* ── 2) Aparecer al llegar + cifras que cuentan (las estrellas se llenan solas con CSS) ── */
       function contar(el) {
         var fin = parseFloat(el.dataset.cuenta), ini = parseFloat(el.dataset.desde || 0);
-        var dec = parseInt(el.dataset.decimales || 0, 10), suf = el.dataset.sufijo || '';
-        var t0 = null, dur = 1300;
+        var dec = parseInt(el.dataset.decimales || 0, 10);
+        var t0 = null, dur = 1400;
         function paso(t) {
           if (!t0) t0 = t;
           var p = limitar((t - t0) / dur, 0, 1), suave = 1 - Math.pow(1 - p, 3);
           var v = ini + (fin - ini) * suave;
-          el.textContent = (dec ? v.toFixed(dec).replace('.', ',') : Math.round(v)) + suf;
+          el.textContent = dec ? v.toFixed(dec).replace('.', ',') : Math.round(v);
           if (p < 1) requestAnimationFrame(paso);
         }
         requestAnimationFrame(paso);
@@ -641,14 +758,13 @@
             if (!sinMovimiento) e.target.querySelectorAll('[data-cuenta]').forEach(contar);
             ojo.unobserve(e.target);
           });
-        }, { threshold: 0.18 });
+        }, { threshold: 0.15 });
         apariciones.forEach(function (el) { ojo.observe(el); });
       } else {
         apariciones.forEach(function (el) { el.classList.add('visto'); });
       }
 
       /* ── 3) Panel deslizante ── */
-      var riel = document.getElementById('riel');
       var paneles = [].slice.call(riel.querySelectorAll('.panel'));
       var rotulo = document.getElementById('rotulo');
       var palabras = [].slice.call(rotulo.children);
@@ -657,18 +773,17 @@
       if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         document.getElementById('pista-texto').textContent = 'Arrastre con el mouse hacia el lado';
       }
+      var activo = 0, enVista = false;
 
-      // empujoncito: una sola vez, cuando el panel entra en pantalla
-      if ('IntersectionObserver' in window && !sinMovimiento) {
-        var vigia = new IntersectionObserver(function (entradas) {
-          if (!entradas[0].isIntersecting) return;
-          riel.classList.add('empujar');
-          vigia.disconnect();
-          var quitar = function () { riel.classList.remove('empujar'); };
-          setTimeout(quitar, 1600);
-          riel.addEventListener('pointerdown', quitar, { once: true });
-        }, { threshold: 0.35 });
-        vigia.observe(riel);
+      function panelCercano() {
+        var borde = riel.getBoundingClientRect().left + parseFloat(getComputedStyle(riel).paddingLeft);
+        var mejor = 0, menor = Infinity;
+        paneles.forEach(function (pn, n) {
+          var d = Math.abs(pn.getBoundingClientRect().left - borde);
+          if (d < menor) { menor = d; mejor = n; }
+        });
+        if (riel.scrollLeft + riel.clientWidth >= riel.scrollWidth - 4) mejor = paneles.length - 1;
+        return mejor;
       }
 
       // el rótulo (Comida / Bebidas / Postres) se mueve junto con los paneles
@@ -686,12 +801,17 @@
           w.style.transform = 'scale(' + (1 - d * 0.14).toFixed(3) + ')';
         });
         avance.style.width = ((1 + idx) / paneles.length * 100).toFixed(1) + '%';
-        raiz.style.setProperty('--giro', (-riel.scrollLeft * 0.07).toFixed(1));
+        riel.style.setProperty('--giro', (-riel.scrollLeft * 0.07).toFixed(1));
         if (riel.scrollLeft > 40) pista.classList.add('ya');
       }
-      var cuadro = false;
+      var cuadro = false, quieto;
       riel.addEventListener('scroll', function () {
         if (!cuadro) { cuadro = true; requestAnimationFrame(function () { cuadro = false; sincronizar(); }); }
+        clearTimeout(quieto);
+        quieto = setTimeout(function () {
+          var n = panelCercano();
+          if (n !== activo) { activo = n; servir(n); }
+        }, 140);
       }, { passive: true });
       window.addEventListener('resize', sincronizar);
       sincronizar();
@@ -701,16 +821,6 @@
         var destino = paneles[n].offsetLeft - parseFloat(getComputedStyle(riel).paddingLeft);
         riel.scrollTo({ left: destino, behavior: sinMovimiento ? 'auto' : 'smooth' });
       }
-      function panelCercano() {
-        var borde = riel.getBoundingClientRect().left + parseFloat(getComputedStyle(riel).paddingLeft);
-        var mejor = 0, menor = Infinity;
-        paneles.forEach(function (pn, n) {
-          var d = Math.abs(pn.getBoundingClientRect().left - borde);
-          if (d < menor) { menor = d; mejor = n; }
-        });
-        return mejor;
-      }
-      // teclado: flechas izquierda / derecha
       riel.addEventListener('keydown', function (e) {
         if (e.key === 'ArrowRight') { e.preventDefault(); irA(panelCercano() + 1); }
         if (e.key === 'ArrowLeft') { e.preventDefault(); irA(panelCercano() - 1); }
@@ -733,13 +843,71 @@
         var dx = e.clientX - arrastre.x, desde = arrastre.inicio;
         arrastre = null;
         if (!huboArrastre) return;
-        var destino = Math.abs(dx) > 70 ? desde + (dx < 0 ? 1 : -1) : desde;
-        irA(destino);
+        irA(Math.abs(dx) > 70 ? desde + (dx < 0 ? 1 : -1) : desde);
         setTimeout(function () { riel.classList.remove('arrastrando'); }, sinMovimiento ? 0 : 450);
         setTimeout(function () { huboArrastre = false; }, 60);
       });
 
-      /* ── 4) Tocar un plato lo agranda ── */
+      /* ── 4) Vida en celular ──
+         a) al llegar a un panel, sus platos saltan uno por uno
+         b) en pantallas táctiles, un "foco" recorre los platos visibles y los levanta,
+            igual que cuando se pasa el mouse en computadora */
+      var servidos = {};
+      function servir(n) {
+        if (sinMovimiento || !enVista) return;
+        var items = paneles[n].querySelectorAll('.plato, .postres li');
+        items.forEach(function (it, k) {
+          it.classList.remove('saltar');
+          void it.offsetWidth;
+          it.style.setProperty('--n', k);
+          it.classList.add('saltar');
+        });
+        servidos[n] = true;
+      }
+      paneles.forEach(function (pn) {
+        pn.addEventListener('animationend', function (e) {
+          var it = e.target.closest('.saltar');
+          if (it && (e.animationName === 'saltar' || e.animationName === 'asomar')) it.classList.remove('saltar');
+        });
+      });
+
+      if ('IntersectionObserver' in window && !sinMovimiento) {
+        var primeraVez = true;
+        new IntersectionObserver(function (entradas) {
+          enVista = entradas[0].isIntersecting;
+          if (!enVista) return;
+          if (primeraVez) {
+            primeraVez = false;
+            riel.classList.add('empujar');
+            var quitar = function () { riel.classList.remove('empujar'); };
+            setTimeout(quitar, 1600);
+            riel.addEventListener('pointerdown', quitar, { once: true });
+            setTimeout(function () { servir(activo); }, 1500);
+          } else if (!servidos[activo]) {
+            servir(activo);
+          }
+        }, { threshold: 0.3 }).observe(riel);
+      }
+
+      var focoN = 0, pausa = 0;
+      function apagarFoco() { riel.querySelectorAll('.foco').forEach(function (el) { el.classList.remove('foco'); }); }
+      if (tactil && !sinMovimiento) {
+        setInterval(function () {
+          apagarFoco();
+          if (!enVista || document.hidden || Date.now() < pausa) return;
+          var alto = window.innerHeight, ancho = window.innerWidth;
+          var visibles = [].slice.call(paneles[activo].querySelectorAll('.plato, .postres li')).filter(function (it) {
+            var r = it.getBoundingClientRect();
+            return r.top > 70 && r.bottom < alto - 10 && r.left > -4 && r.right < ancho + 4;
+          });
+          if (!visibles.length) return;
+          visibles[focoN++ % visibles.length].classList.add('foco');
+        }, 1700);
+        // mientras la persona toca o desliza, el foco se pausa
+        riel.addEventListener('touchstart', function () { pausa = Date.now() + 2600; apagarFoco(); }, { passive: true });
+      }
+
+      /* ── 5) Tocar un plato lo agranda ── */
       var visor = document.getElementById('visor');
       var visorArte = document.getElementById('visor-arte');
       var visorNombre = document.getElementById('visor-nombre');
@@ -753,35 +921,40 @@
       });
       visor.addEventListener('click', function () { visor.close(); });
 
-      /* ── 5) Abierto o cerrado, según la hora de Costa Rica ── */
+      /* ── 6) Abierto o cerrado, según la hora de Costa Rica ── */
       var HORARIO = { 0: [11, 22], 1: null, 2: [11, 24], 3: [11, 24], 4: [11, 24], 5: [11, 24], 6: [11, 24] };
       var DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-      function horaTexto(h) { return h === 24 ? 'medianoche' : (h > 12 ? (h - 12) + ':00 p.m.' : h + ':00 a.m.'); }
+      function hora(h) { return h === 24 ? 'medianoche' : (h > 12 ? (h - 12) + ' p.m.' : h + ' a.m.'); }
       function frase(t) { return /\.$/.test(t) ? t : t + '.'; }
       try {
         var partes = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Costa_Rica', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
         var dato = {};
         partes.forEach(function (p) { dato[p.type] = p.value; });
         var dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(dato.weekday);
-        var hora = parseInt(dato.hour, 10) + parseInt(dato.minute, 10) / 60;
-        var hoy = HORARIO[dia], corto, largo, abierto = false;
-        if (hoy && hora >= hoy[0] && hora < hoy[1]) {
+        var ahora = parseInt(dato.hour, 10) + parseInt(dato.minute, 10) / 60;
+        var hoy = HORARIO[dia], a, b, largo, abierto = false;
+        if (hoy && ahora >= hoy[0] && ahora < hoy[1]) {
           abierto = true;
-          corto = 'Abierto · hasta ' + (hoy[1] === 24 ? 'medianoche' : 'las ' + horaTexto(hoy[1]));
-          largo = frase('Ahora mismo estamos abiertos, hasta ' + (hoy[1] === 24 ? 'la medianoche' : 'las ' + horaTexto(hoy[1])));
-        } else if (hoy && hora < hoy[0]) {
-          corto = 'Abrimos hoy a las ' + horaTexto(hoy[0]);
-          largo = frase('Hoy abrimos a las ' + horaTexto(hoy[0]));
+          a = 'Abierto ahora';
+          b = hoy[1] === 24 ? 'hasta medianoche' : 'hasta las ' + hora(hoy[1]);
+          largo = frase('Ahora mismo estamos abiertos, ' + b);
+        } else if (hoy && ahora < hoy[0]) {
+          a = 'Cerrado ahora';
+          b = 'abre hoy, ' + hora(hoy[0]);
+          largo = frase('Hoy abrimos a las ' + hora(hoy[0]));
         } else {
           var n = dia, saltos = 0;
           do { n = (n + 1) % 7; saltos++; } while (!HORARIO[n]);
           var cuando = saltos === 1 ? 'mañana' : 'el ' + DIAS[n];
-          corto = 'Cerrado · abre ' + cuando;
-          largo = frase('Ahora estamos cerrados. Abrimos ' + cuando + ' a las ' + horaTexto(HORARIO[n][0]));
+          a = 'Cerrado ahora';
+          b = 'abre ' + cuando + ', ' + hora(HORARIO[n][0]);
+          largo = frase('Ahora estamos cerrados. Abrimos ' + cuando + ' a las ' + hora(HORARIO[n][0]));
         }
         var estado = document.getElementById('estado');
-        estado.lastElementChild.textContent = corto;
-        estado.classList.toggle('cerrado', !abierto);
+        document.getElementById('estado-a').textContent = a;
+        document.getElementById('estado-b').textContent = b;
+        estado.classList.toggle('abierto', abierto);
+        estado.setAttribute('aria-label', a + ', ' + b + '. Ver horario completo');
         document.getElementById('hoy-estado').textContent = largo;
         document.querySelectorAll('#horario li').forEach(function (li) {
           if (li.dataset.dias.split(',').indexOf(String(dia)) > -1) li.classList.add('hoy');
