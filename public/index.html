@@ -3,29 +3,448 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>La Posada de las Brujas · Escazú</title>
+  <title>La Posada de las Brujas | Comida casera en Escazú</title>
+  <meta name="description" content="Restaurante y bar en Escazú centro, Costa Rica. Comida casera costarricense, parrilla y cocteles desde 2012.">
+  <meta property="og:title" content="La Posada de las Brujas | Escazú">
+  <meta property="og:description" content="Comida casera costarricense, parrilla y cocteles en Escazú centro. Desde 2012.">
+  <meta property="og:image" content="img/platos-del-dia.jpg">
+  <meta name="theme-color" content="#1d4a96">
+  <link rel="icon" href="img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,600..900,100&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; }
-    body {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 2rem;
-      background: #2a1745;
-      color: #f6ecd9;
-      font-family: Georgia, "Times New Roman", serif;
+    /* ───────── Colores: salen de la casa del local ─────────
+       cal     = pared blanca
+       zocalo  = franja azul de la base (típica de las casas de Escazú)
+       ladrillo= la chimenea roja
+       morado y oro = solo detalles, vienen del sombrero del logo */
+    :root {
+      --cal: #fbfaf6;
+      --cal-sombra: #efece3;
+      --zocalo: #1d4a96;
+      --zocalo-oscuro: #143670;
+      --ladrillo: #b5321f;
+      --tinta: #1c1d24;
+      --tinta-suave: #54565f;
+      --morado: #5a3a9a;
+      --oro: #f0b323;
+      --display: "Fraunces", Georgia, "Times New Roman", serif;
+      --texto: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --ancho: 68rem;
     }
-    h1 { font-size: clamp(2rem, 6vw, 3.5rem); color: #e7b94a; }
-    p { margin-top: 1rem; font-size: 1.15rem; }
-    .small { opacity: .75; font-size: 1rem; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--cal);
+      color: var(--tinta);
+      font-family: var(--texto);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    h1, h2, h3, p, ul, figure { margin: 0; }
+    ul { padding: 0; list-style: none; }
+    :focus-visible { outline: 3px solid var(--oro); outline-offset: 3px; }
+
+    .contenedor { width: min(100% - 2.5rem, var(--ancho)); margin-inline: auto; }
+
+    h1, h2 { font-family: var(--display); font-variation-settings: "SOFT" 100; line-height: 1.02; letter-spacing: -0.01em; }
+    h2 { font-size: clamp(2rem, 7vw, 3rem); font-weight: 800; color: var(--zocalo-oscuro); }
+
+    /* ───────── Barra superior ───────── */
+    .barra {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--cal);
+      border-bottom: 4px solid var(--zocalo);
+    }
+    .barra .contenedor { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .5rem; }
+    .marca { display: flex; align-items: center; gap: .6rem; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 1.05rem; line-height: 1.05; }
+    .marca img { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--morado); background: #fff; }
+    .boton {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 48px; padding: .7rem 1.25rem;
+      border-radius: 999px; border: 2px solid transparent;
+      font-weight: 700; font-size: 1rem; text-decoration: none; white-space: nowrap;
+    }
+    .boton svg { width: 1.1em; height: 1.1em; flex: none; }
+    .boton-ladrillo { background: var(--ladrillo); color: #fff; }
+    .boton-ladrillo:hover { background: #972815; }
+    .boton-linea { border-color: var(--zocalo); color: var(--zocalo-oscuro); background: #fff; }
+    .boton-linea:hover { background: var(--zocalo); color: #fff; }
+    .barra .boton { min-height: 44px; padding: .5rem 1rem; font-size: .95rem; }
+
+    /* ───────── Portada: pared blanca + zócalo azul ───────── */
+    .portada { padding-top: 2rem; }
+    .portada > .contenedor { display: grid; gap: 1.75rem; }
+    .desde {
+      display: inline-block; align-self: start; justify-self: start;
+      padding: .25rem .8rem; border-radius: 999px;
+      background: var(--morado); color: #fff; font-weight: 600; font-size: .9rem;
+    }
+    h1 { font-size: clamp(2.9rem, 14vw, 5.6rem); font-weight: 900; color: var(--zocalo-oscuro); margin-top: .8rem; }
+    h1 span { display: block; color: var(--ladrillo); }
+    .lema { margin-top: 1rem; font-size: 1.15rem; max-width: 32ch; color: var(--tinta-suave); }
+    .acciones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+    .foto-portada { position: relative; }
+    .foto-portada img {
+      width: 100%; aspect-ratio: 4 / 4.2; object-fit: cover;
+      border-radius: 1.25rem 1.25rem 0 0;
+      border: 6px solid #fff; border-bottom: 0;
+      box-shadow: 0 0 0 2px var(--zocalo);
+    }
+    .zocalo {
+      background: var(--zocalo); color: #fff;
+      border-top: 6px solid var(--oro);
+    }
+    .zocalo ul { display: grid; gap: .35rem; padding-block: 1.1rem; font-weight: 500; }
+    .zocalo li { display: flex; gap: .6rem; align-items: baseline; }
+    .zocalo strong { font-weight: 700; }
+
+    /* ───────── Historia ───────── */
+    .historia { padding-block: 3.5rem; }
+    .historia .contenedor { display: grid; gap: 1.5rem; align-items: center; }
+    .historia p { font-size: 1.15rem; max-width: 46ch; margin-top: 1rem; }
+    .historia img { width: 132px; height: 132px; border-radius: 50%; border: 4px solid var(--morado); background: #fff; }
+
+    /* ───────── Carta: panel deslizante ───────── */
+    .carta { padding-block: 3rem 3.5rem; background: var(--cal-sombra); overflow: hidden; }
+    .carta-cabeza { display: grid; gap: .4rem; }
+    .pista { color: var(--tinta-suave); font-size: .98rem; }
+    .pestanas { display: flex; gap: .5rem; margin-top: 1.25rem; }
+    .pestanas button {
+      flex: 1; min-height: 48px; padding: .5rem .75rem;
+      border: 2px solid var(--zocalo); border-radius: 999px;
+      background: #fff; color: var(--zocalo-oscuro);
+      font: 700 1rem var(--texto); cursor: pointer;
+    }
+    .pestanas button[aria-selected="true"] { background: var(--zocalo); color: #fff; }
+
+    .riel {
+      display: flex; gap: 1rem;
+      margin-top: 1.25rem;
+      padding-inline: max(1.25rem, (100vw - var(--ancho)) / 2);
+      overflow-x: auto; overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: max(1.25rem, (100vw - var(--ancho)) / 2);
+      scrollbar-width: none;
+    }
+    .riel::-webkit-scrollbar { display: none; }
+    .panel {
+      flex: 0 0 min(88%, 60rem);
+      scroll-snap-align: start;
+      background: #fff; border-radius: 1.25rem;
+      border-top: 8px solid var(--ladrillo);
+      padding: 1.25rem;
+    }
+    .panel:nth-child(2) { border-top-color: var(--zocalo); }
+    .panel:nth-child(3) { border-top-color: var(--morado); }
+    .panel h3 { font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 800; font-size: 2rem; line-height: 1.05; }
+    .panel > p { color: var(--tinta-suave); margin-top: .35rem; }
+
+    .platos { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: 1.1rem; }
+    .platos figure:first-child { grid-column: 1 / -1; }
+    .platos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: .8rem; }
+    .platos figure:first-child img { aspect-ratio: 16 / 11; }
+    .platos figcaption { margin-top: .4rem; font-weight: 600; font-size: .98rem; line-height: 1.25; }
+    .panel-bebidas .platos figure:first-child { grid-column: auto; }
+    .panel-bebidas .platos img, .panel-bebidas .platos figure:first-child img { aspect-ratio: 4 / 5; }
+
+    .postres { margin-top: 1.1rem; columns: 1; }
+    .postres li { padding: .7rem 0; border-bottom: 1px dashed #cfc9dd; font-weight: 600; break-inside: avoid; }
+    .postres li small { display: block; font-weight: 400; font-size: .92rem; color: var(--tinta-suave); }
+    .nota { margin-top: 1rem; font-size: .92rem; color: var(--tinta-suave); }
+
+    /* El "empujoncito": se dispara una sola vez cuando el panel entra en pantalla */
+    @keyframes empujon {
+      0%, 100% { transform: translateX(0); }
+      35% { transform: translateX(-4.5rem); }
+      60% { transform: translateX(.5rem); }
+    }
+    .riel.empujar .panel { animation: empujon 1.1s cubic-bezier(.3, .7, .3, 1) .25s 1; }
+
+    .puntos { display: flex; justify-content: center; gap: .5rem; margin-top: 1rem; }
+    .puntos span { width: .6rem; height: .6rem; border-radius: 50%; background: #c9c5b8; transition: width .2s, background .2s; }
+    .puntos span.activo { width: 1.6rem; border-radius: 999px; background: var(--ladrillo); }
+
+    /* ───────── Visítenos ───────── */
+    .visita { padding-block: 3.5rem; }
+    .visita .contenedor { display: grid; gap: 1.75rem; }
+    .datos { display: grid; gap: 1.1rem; margin-top: 1.25rem; }
+    .datos h3 { font-size: .95rem; font-weight: 700; color: var(--ladrillo); }
+    .datos p, .datos li { font-size: 1.08rem; }
+    .horario li { display: flex; justify-content: space-between; gap: 1rem; max-width: 22rem; padding: .15rem 0; }
+    .horario .cerrado { color: var(--tinta-suave); }
+    .mapa { border-radius: 1.25rem; overflow: hidden; border: 2px solid var(--zocalo); background: var(--cal-sombra); }
+    .mapa iframe { display: block; width: 100%; height: 320px; border: 0; }
+
+    /* ───────── Pie ───────── */
+    .pie { background: var(--zocalo-oscuro); color: #dfe6f5; border-top: 6px solid var(--oro); padding-block: 1.75rem; font-size: .95rem; }
+    .pie .contenedor { display: grid; gap: .4rem; }
+    .pie strong { font-family: var(--display); font-size: 1.25rem; color: #fff; }
+
+    /* ───────── Pantallas grandes ───────── */
+    @media (min-width: 48rem) {
+      .portada > .contenedor { grid-template-columns: 1.05fr .95fr; align-items: end; gap: 3rem; }
+      .portada-texto { padding-bottom: 3rem; }
+      .zocalo ul { grid-auto-flow: column; justify-content: space-between; }
+      .historia .contenedor { grid-template-columns: auto 1fr; gap: 2.5rem; }
+      .pestanas { max-width: 30rem; }
+      .panel { padding: 2rem; flex-basis: min(80%, 52rem); }
+      .platos { grid-template-columns: repeat(4, 1fr); }
+      .platos figure:first-child { grid-column: span 2; grid-row: span 2; display: flex; flex-direction: column; }
+      .platos figure:first-child img { aspect-ratio: auto; flex: 1; min-height: 0; }
+      .panel-bebidas .platos figure:first-child { grid-column: auto; grid-row: auto; display: block; }
+      .panel-bebidas .platos figure:first-child img { aspect-ratio: 4 / 5; }
+      .postres { columns: 2; column-gap: 2.5rem; }
+      .visita .contenedor { grid-template-columns: 1fr 1.1fr; align-items: start; gap: 3rem; }
+      .mapa iframe { height: 420px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .riel.empujar .panel { animation: none; }
+      .puntos span { transition: none; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>La Posada de las Brujas</h1>
-    <p>Desde 2012 · Escazú, Costa Rica</p>
-    <p class="small">Estamos preparando nuestra página.</p>
+
+  <header class="barra">
+    <div class="contenedor">
+      <a class="marca" href="#inicio">
+        <img src="img/logo.png" alt="" width="46" height="46">
+        <span>La Posada<br>de las Brujas</span>
+      </a>
+      <a class="boton boton-ladrillo" href="tel:+50622281645">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8z"/></svg>
+        Llamar
+      </a>
+    </div>
+  </header>
+
+  <main id="inicio">
+
+    <section class="portada">
+      <div class="contenedor">
+        <div class="portada-texto">
+          <span class="desde">Desde 2012 en Escazú</span>
+          <h1>La Posada <span>de las Brujas</span></h1>
+          <p class="lema">Comida casera bien tica, parrilla y cocteles, a pocos pasos del centro de Escazú.</p>
+          <div class="acciones">
+            <a class="boton boton-ladrillo" href="#carta">Ver la carta</a>
+            <a class="boton boton-linea" href="#visita">Cómo llegar</a>
+          </div>
+        </div>
+        <div class="foto-portada">
+          <img src="img/platos-del-dia.jpg" alt="Platos recién servidos en la cocina de La Posada de las Brujas" width="720" height="900" fetchpriority="high">
+        </div>
+      </div>
+      <div class="zocalo">
+        <ul class="contenedor">
+          <li><strong>Martes a sábado</strong> 11:00 a.m. a medianoche</li>
+          <li><strong>Domingo</strong> 11:00 a.m. a 10:00 p.m.</li>
+          <li><strong>Teléfono</strong> <a href="tel:+50622281645">2228 1645</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="historia">
+      <div class="contenedor">
+        <img src="img/logo.png" alt="Logo de La Posada de las Brujas: un sombrero de bruja con cinta morada" width="132" height="132" loading="lazy">
+        <div>
+          <h2>Cocina de un escazuceño de corazón</h2>
+          <p>Abrimos las puertas en 2012, en la tierra de las brujas. Desde entonces, un gran equipo cocina cada plato con amor y con calidad, como en casa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="carta" id="carta">
+      <div class="contenedor carta-cabeza">
+        <h2>Lo que servimos</h2>
+        <p class="pista">Deslice hacia el lado para pasar de comida a bebidas y postres.</p>
+        <div class="pestanas" role="tablist" aria-label="Secciones de la carta">
+          <button type="button" role="tab" aria-selected="true" aria-controls="panel-comida">Comida</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-bebidas">Bebidas</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-postres">Postres</button>
+        </div>
+      </div>
+
+      <div class="riel" id="riel" tabindex="0" aria-label="Carta deslizante">
+        <article class="panel" id="panel-comida" role="tabpanel">
+          <h3>Comida</h3>
+          <p>Casados, bocas y parrilla, con sabor de casa.</p>
+          <div class="platos">
+            <figure>
+              <img src="img/patacones-carne-mechada.jpg" alt="Patacones tostados con un tazón de carne mechada" width="720" height="900" loading="lazy">
+              <figcaption>Patacones con carne mechada</figcaption>
+            </figure>
+            <figure>
+              <img src="img/arrachera.jpg" alt="Arrachera a la parrilla con arroz y puré" width="720" height="854" loading="lazy">
+              <figcaption>Arrachera</figcaption>
+            </figure>
+            <figure>
+              <img src="img/chifrijo.jpg" alt="Chifrijo con frijoles, chicharrón, pico de gallo y aguacate" width="576" height="698" loading="lazy">
+              <figcaption>Chifrijo</figcaption>
+            </figure>
+            <figure>
+              <img src="img/filet-empanizado.jpg" alt="Casado con filet de pescado empanizado, arroz, frijoles y ensalada" width="720" height="776" loading="lazy">
+              <figcaption>Casado con filet empanizado</figcaption>
+            </figure>
+            <figure>
+              <img src="img/pezuna-de-cerdo.jpg" alt="Pezuña de cerdo en caldo con verduras y arroz" width="576" height="696" loading="lazy">
+              <figcaption>Pezuña de cerdo</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="panel panel-bebidas" id="panel-bebidas" role="tabpanel">
+          <h3>Bebidas</h3>
+          <p>Cocteles de la barra, cervezas, naturales y café.</p>
+          <div class="platos">
+            <figure>
+              <img src="img/sangria.jpg" alt="Dos copas de sangría con fruta picada" width="720" height="900" loading="lazy">
+              <figcaption>Sangría</figcaption>
+            </figure>
+            <figure>
+              <img src="img/pina-colada.jpg" alt="Piña colada con una rodaja de piña y sombrillita" width="720" height="900" loading="lazy">
+              <figcaption>Piña colada</figcaption>
+            </figure>
+            <figure>
+              <img src="img/daiquiri-fresa.jpg" alt="Coctel frozen rosado con cereza" width="720" height="900" loading="lazy">
+              <figcaption>Daiquirí de fresa</figcaption>
+            </figure>
+            <figure>
+              <img src="img/coctel-naranja.jpg" alt="Coctel naranja con cereza y limón" width="720" height="900" loading="lazy">
+              <figcaption>Tequila sunrise</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="panel" id="panel-postres" role="tabpanel">
+          <h3>Postres</h3>
+          <p>Para cerrar con algo dulce.</p>
+          <ul class="postres">
+            <li>Arroz con leche</li>
+            <li>Cajeta de leche</li>
+            <li>Cheesecake <small>Fresa o limón</small></li>
+            <li>Flan <small>Caramelo o coco</small></li>
+            <li>Helado casero</li>
+            <li>Pie de limón</li>
+            <li>Queque personal de cumpleaños</li>
+            <li>Selva negra</li>
+            <li>Tres leches</li>
+            <li>Torta chilena</li>
+          </ul>
+          <p class="nota">Pregunte en el local por los precios y la disponibilidad del día.</p>
+        </article>
+      </div>
+
+      <div class="puntos" aria-hidden="true"><span class="activo"></span><span></span><span></span></div>
+    </section>
+
+    <section class="visita" id="visita">
+      <div class="contenedor">
+        <div>
+          <h2>Venga a visitarnos</h2>
+          <div class="datos">
+            <div>
+              <h3>Dirección</h3>
+              <p>De la Municipalidad de Escazú centro, 350 metros al este. Escazú, San José, Costa Rica.</p>
+            </div>
+            <div>
+              <h3>Horario</h3>
+              <ul class="horario">
+                <li class="cerrado"><span>Lunes</span><span>Cerrado</span></li>
+                <li><span>Martes a sábado</span><span>11:00 a.m. a 12:00 a.m.</span></li>
+                <li><span>Domingo</span><span>11:00 a.m. a 10:00 p.m.</span></li>
+              </ul>
+            </div>
+            <div>
+              <h3>Contacto</h3>
+              <p><a href="tel:+50622281645">2228 1645</a></p>
+              <p><a href="https://www.facebook.com/LAPOSADADELASBRUJAS/" target="_blank" rel="noopener">Facebook: La Posada de las Brujas</a></p>
+            </div>
+          </div>
+          <div class="acciones">
+            <a class="boton boton-ladrillo" href="https://www.google.com/maps/search/?api=1&query=La+Posada+de+las+Brujas+Escaz%C3%BA&query_place_id=ChIJExja7Yz8oI8RbmPUolcKoBo" target="_blank" rel="noopener">Abrir en Google Maps</a>
+            <a class="boton boton-linea" href="tel:+50622281645">Llamar al local</a>
+          </div>
+        </div>
+        <div class="mapa">
+          <iframe title="Mapa de La Posada de las Brujas en Escazú" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=La+Posada+de+las+Brujas+Escaz%C3%BA&ll=9.9196355,-84.136587&z=17&output=embed"></iframe>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <footer class="pie">
+    <div class="contenedor">
+      <strong>La Posada de las Brujas</strong>
+      <span>Restaurante y bar en Escazú centro, Costa Rica. Desde 2012.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var riel = document.getElementById('riel');
+      var paneles = Array.prototype.slice.call(riel.querySelectorAll('.panel'));
+      var pestanas = Array.prototype.slice.call(document.querySelectorAll('.pestanas button'));
+      var puntos = Array.prototype.slice.call(document.querySelectorAll('.puntos span'));
+      var sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1) Empujoncito: una sola vez, cuando el panel entra en pantalla
+      if ('IntersectionObserver' in window && !sinMovimiento) {
+        var vigia = new IntersectionObserver(function (entradas) {
+          if (entradas[0].isIntersecting) {
+            riel.classList.add('empujar');
+            vigia.disconnect();
+            // Al terminar (o si la persona toca antes), se quita para no estorbar el deslizado
+            var quitar = function () { riel.classList.remove('empujar'); };
+            setTimeout(quitar, 1600);
+            riel.addEventListener('pointerdown', quitar, { once: true });
+          }
+        }, { threshold: 0.45 });
+        vigia.observe(riel);
+      }
+
+      // 2) Saber cuál panel está al frente y marcar pestaña y punto
+      function marcar(i) {
+        pestanas.forEach(function (b, n) { b.setAttribute('aria-selected', n === i ? 'true' : 'false'); });
+        puntos.forEach(function (p, n) { p.classList.toggle('activo', n === i); });
+      }
+      function panelActual() {
+        var borde = riel.getBoundingClientRect().left;
+        var mejor = 0, menor = Infinity;
+        paneles.forEach(function (p, n) {
+          var d = Math.abs(p.getBoundingClientRect().left - borde - parseFloat(getComputedStyle(riel).paddingLeft));
+          if (d < menor) { menor = d; mejor = n; }
+        });
+        // Si ya no se puede deslizar más, el último panel es el activo
+        if (riel.scrollLeft + riel.clientWidth >= riel.scrollWidth - 4) mejor = paneles.length - 1;
+        return mejor;
+      }
+      var espera;
+      riel.addEventListener('scroll', function () {
+        clearTimeout(espera);
+        espera = setTimeout(function () { marcar(panelActual()); }, 60);
+      }, { passive: true });
+
+      // 3) Las pestañas llevan a su panel
+      pestanas.forEach(function (b, n) {
+        b.addEventListener('click', function () {
+          riel.classList.remove('empujar');
+          var destino = paneles[n].offsetLeft - parseFloat(getComputedStyle(riel).paddingLeft);
+          riel.scrollTo({ left: destino, behavior: sinMovimiento ? 'auto' : 'smooth' });
+          marcar(n);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
